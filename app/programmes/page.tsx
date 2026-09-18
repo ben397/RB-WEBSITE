@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import { programmes } from "@/content/programs";
+import { Illustration } from "@/components/illustrations/Illustration";
 
 export const metadata: Metadata = {
   title: "Programmes",
@@ -32,10 +33,9 @@ export default function ProgrammesIndex() {
               href={`/programmes/${programme.slug}`}
               className="group block rounded-2xl border border-ink/10 p-6 transition-colors hover:border-ochre"
             >
-              <div
-                className="aspect-[16/9] rounded-xl bg-gradient-to-br from-sage/40 via-blue/30 to-navy/20"
-                aria-hidden="true"
-              />
+              <div className="aspect-[16/9] overflow-hidden rounded-xl">
+                <Illustration variant={programme.slug} className="h-full w-full" />
+              </div>
               <h2 className="mt-5 font-serif text-2xl font-semibold text-navy">
                 {programme.name}
               </h2>

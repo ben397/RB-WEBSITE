@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { programmes } from "@/content/programs";
+import { Illustration } from "@/components/illustrations/Illustration";
 
 // Home shows a teaser per programme (name + one-liner) and links out to the dedicated
 // /programmes/[slug] page for the full detail — sub-projects, highlights, everything.
@@ -25,10 +26,9 @@ export function ProgrammeSection() {
                 reversed ? "md:[&>*:first-child]:order-2" : ""
               }`}
             >
-              <div
-                className="hidden aspect-[16/9] rounded-2xl bg-gradient-to-br from-sage/40 via-blue/30 to-navy/20 md:col-span-2 md:block"
-                aria-hidden="true"
-              />
+              <div className="hidden aspect-[16/9] overflow-hidden rounded-2xl md:col-span-2 md:block">
+                <Illustration variant={programme.slug} className="h-full w-full" />
+              </div>
               <div className="md:col-span-3">
                 <h3 className="font-serif text-2xl font-semibold text-navy">
                   {programme.name}

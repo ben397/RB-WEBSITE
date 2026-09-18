@@ -1,4 +1,5 @@
 import { team } from "@/content/team";
+import { AvatarIllustration } from "@/components/illustrations/Illustration";
 
 export function TeamSection() {
   const known = team.filter((m) => m.name);
@@ -10,10 +11,9 @@ export function TeamSection() {
       <div className="mt-10 grid grid-cols-2 gap-8 sm:grid-cols-4">
         {known.map((member) => (
           <div key={member.name}>
-            <div
-              className="aspect-square rounded-2xl bg-gradient-to-br from-navy/10 to-ochre/20"
-              aria-hidden="true"
-            />
+            <div className="aspect-square overflow-hidden rounded-2xl">
+              <AvatarIllustration seed={member.name ?? ""} className="h-full w-full" />
+            </div>
             <p className="mt-3 font-semibold text-navy">{member.name}</p>
             {member.role && <p className="text-sm text-ink/70">{member.role}</p>}
           </div>

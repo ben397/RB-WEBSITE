@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { programmes, getProgramme, type Programme } from "@/content/programs";
 import { CTASection } from "@/components/CTASection";
+import { Illustration } from "@/components/illustrations/Illustration";
 
 export function generateStaticParams() {
   return programmes.map((p) => ({ slug: p.slug }));
@@ -59,6 +60,10 @@ export default async function ProgrammeDetail({
               the README for what&apos;s missing before this goes live.
             </p>
           )}
+
+          <div className="mt-8 aspect-[21/9] overflow-hidden rounded-2xl">
+            <Illustration variant={programme.slug} className="h-full w-full" />
+          </div>
         </div>
       </section>
 

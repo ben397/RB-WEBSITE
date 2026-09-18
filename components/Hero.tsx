@@ -2,10 +2,12 @@ import Link from "next/link";
 import { siteInfo } from "@/content/site";
 import { impactStats } from "@/content/impact";
 import { StatBlock } from "@/components/StatBlock";
+import { Illustration } from "@/components/illustrations/Illustration";
 
-// The visual panel is a deliberate abstract placeholder (gradient + layered shapes), not a
-// stock photo pretending to be real. Swap for consented photography of RB's actual work
-// once it's available — this environment has no network access to pull external images.
+// The visual panel is a custom illustration standing in for real photography — this
+// environment has no network access to pull stock photos, and a designed illustration
+// reads as intentional rather than as filler. Swap for consented photography of RB's
+// actual work once it's available.
 export function Hero() {
   return (
     <section className="border-b border-ink/10 bg-paper">
@@ -34,12 +36,8 @@ export function Hero() {
           </div>
         </div>
 
-        <div
-          className="relative hidden aspect-[4/5] overflow-hidden rounded-3xl bg-gradient-to-br from-blue via-navy to-ochre md:col-span-2 md:block"
-          aria-hidden="true"
-        >
-          <div className="absolute -left-10 top-10 h-40 w-40 rounded-full bg-paper/10" />
-          <div className="absolute bottom-16 right-0 h-56 w-56 rounded-full bg-ochre/30" />
+        <div className="relative hidden aspect-[4/5] overflow-hidden rounded-3xl md:col-span-2 md:block">
+          <Illustration variant="hero" className="h-full w-full" />
           <div className="absolute inset-x-8 bottom-8 rounded-2xl bg-paper/10 p-4 backdrop-blur-sm">
             <p className="text-sm text-paper/90">Peace Cup · Kayole, Nairobi</p>
           </div>
