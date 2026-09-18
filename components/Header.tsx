@@ -4,7 +4,7 @@ import { MobileNav } from "@/components/MobileNav";
 
 export function Header() {
   return (
-    <header className="relative border-b border-ink/10 bg-paper">
+    <header className="sticky top-0 z-50 border-b border-ink/10 bg-paper/95 shadow-sm backdrop-blur">
       <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
         <Link href="/" className="font-serif text-xl font-semibold text-navy">
           {siteInfo.name}

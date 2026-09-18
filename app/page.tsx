@@ -2,6 +2,7 @@ import { Hero } from "@/components/Hero";
 import { ProgrammeSection } from "@/components/ProgrammeSection";
 import { TeamSection } from "@/components/TeamSection";
 import { PartnersStrip } from "@/components/PartnersStrip";
+import { TestimonialSection } from "@/components/TestimonialSection";
 import { CTASection } from "@/components/CTASection";
 
 export default function Home() {
@@ -10,7 +11,8 @@ export default function Home() {
       <Hero />
       <ProgrammeSection />
       <PartnersStrip />
-      <TeamSection />
+      <TeamSection linkToAbout />
+      <TestimonialSection />
       <CTASection />
     </>
   );
