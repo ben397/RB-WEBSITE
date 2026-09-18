@@ -64,11 +64,33 @@ export function Footer() {
       </div>
 
       <div className="border-t border-paper/10 px-6 py-4 text-xs text-paper/50">
-        <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-2">
+        <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-x-6 gap-y-2">
           <p>
             © {new Date().getFullYear()} {siteInfo.name}
+            {registration.value && ` · Reg. No. ${registration.value}`}
           </p>
-          {registration.value && <p>Reg. No. {registration.value}</p>}
+          <ul className="flex flex-wrap gap-x-4 gap-y-1">
+            <li>
+              <Link href="/governance" className="hover:text-ochre">
+                Governance
+              </Link>
+            </li>
+            <li>
+              <Link href="/safeguarding" className="hover:text-ochre">
+                Safeguarding
+              </Link>
+            </li>
+            <li>
+              <Link href="/annual-report" className="hover:text-ochre">
+                Annual Report
+              </Link>
+            </li>
+            <li>
+              <Link href="/privacy" className="hover:text-ochre">
+                Privacy Policy
+              </Link>
+            </li>
+          </ul>
         </div>
       </div>
     </footer>

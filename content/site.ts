@@ -48,6 +48,15 @@ export const siteInfo = {
     note: "Live site showed both a weekday schedule AND '24/7 Emergency Support' with no distinction. If there is a real emergency line, it needs its own number and framing, not a contradiction under the office hours.",
   },
 
+  // No M-Pesa paybill/till on the live site (it only had USD tiers with no working
+  // payment path). Never invent a number here — a wrong paybill is money misdirected,
+  // not just a cosmetic placeholder.
+  payments: {
+    paybill: null as string | null,
+    tillNumber: null as string | null,
+    note: "RB's M-Pesa paybill or till number for the direct-pay fallback on /donate. Request from Luke before launch.",
+  },
+
   registration: {
     value: null as string | null,
     note: "RB's registration/certificate number was not on the live site. Needed in the footer for funder credibility — request from Luke.",

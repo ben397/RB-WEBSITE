@@ -17,12 +17,21 @@ const workSans = Work_Sans({
   weight: ["400", "500", "600", "700"],
 });
 
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
+
 export const metadata: Metadata = {
+  metadataBase: new URL(siteUrl),
   title: {
     default: `${siteInfo.name} — Refugee-Led Organisation, Nairobi`,
     template: `%s — ${siteInfo.name}`,
   },
   description: siteInfo.tagline,
+  openGraph: {
+    type: "website",
+    siteName: siteInfo.name,
+    title: `${siteInfo.name} — Refugee-Led Organisation, Nairobi`,
+    description: siteInfo.tagline,
+  },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
