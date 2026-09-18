@@ -2,6 +2,7 @@
 
 import { useRef, useState } from "react";
 import { testimonials } from "@/content/testimonials";
+import { Reveal } from "@/components/Reveal";
 
 export function TestimonialSection() {
   const trackRef = useRef<HTMLDivElement>(null);
@@ -24,29 +25,31 @@ export function TestimonialSection() {
 
   return (
     <section className="mx-auto max-w-6xl px-6 py-20">
-      <div className="flex flex-wrap items-baseline justify-between gap-4">
-        <h2 className="font-serif text-3xl font-semibold text-navy">In Their Words</h2>
-        {testimonials.length > 1 && (
-          <div className="flex gap-2">
-            <button
-              type="button"
-              onClick={() => scrollToIndex(index - 1)}
-              aria-label="Previous testimonial"
-              className="flex h-9 w-9 items-center justify-center rounded-full border border-ink/20 text-navy hover:border-ochre hover:text-ochre"
-            >
-              ←
-            </button>
-            <button
-              type="button"
-              onClick={() => scrollToIndex(index + 1)}
-              aria-label="Next testimonial"
-              className="flex h-9 w-9 items-center justify-center rounded-full border border-ink/20 text-navy hover:border-ochre hover:text-ochre"
-            >
-              →
-            </button>
-          </div>
-        )}
-      </div>
+      <Reveal variant="up">
+        <div className="flex flex-wrap items-baseline justify-between gap-4">
+          <h2 className="font-serif text-3xl font-semibold text-navy">In Their Words</h2>
+          {testimonials.length > 1 && (
+            <div className="flex gap-2">
+              <button
+                type="button"
+                onClick={() => scrollToIndex(index - 1)}
+                aria-label="Previous testimonial"
+                className="flex h-9 w-9 items-center justify-center rounded-full border border-ink/20 text-navy hover:border-ochre hover:text-ochre"
+              >
+                ←
+              </button>
+              <button
+                type="button"
+                onClick={() => scrollToIndex(index + 1)}
+                aria-label="Next testimonial"
+                className="flex h-9 w-9 items-center justify-center rounded-full border border-ink/20 text-navy hover:border-ochre hover:text-ochre"
+              >
+                →
+              </button>
+            </div>
+          )}
+        </div>
+      </Reveal>
 
       {hasPlaceholders && (
         <p className="mt-3 text-sm text-ochre">

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { posts } from "@/content/posts";
+import { Reveal } from "@/components/Reveal";
 
 export const metadata: Metadata = {
   title: "Blog",
@@ -12,18 +13,20 @@ export default function BlogIndex() {
     <>
       <section className="border-b border-ink/10 bg-paper">
         <div className="mx-auto max-w-4xl px-6 py-16">
-          <h1 className="font-serif text-4xl font-semibold text-navy sm:text-5xl">Blog</h1>
-          <p className="mt-4 max-w-2xl text-lg text-ink/80">
-            Updates from our programmes, partnerships, and events.
-          </p>
+          <Reveal variant="up">
+            <h1 className="font-serif text-4xl font-semibold text-navy sm:text-5xl">Blog</h1>
+            <p className="mt-4 max-w-2xl text-lg text-ink/80">
+              Updates from our programmes, partnerships, and events.
+            </p>
+          </Reveal>
         </div>
       </section>
 
       <section className="mx-auto max-w-4xl px-6 py-16">
         {posts.length > 0 ? (
           <ul className="space-y-8">
-            {posts.map((post) => (
-              <li key={post.slug} className="border-t border-ink/10 pt-6">
+            {posts.map((post, i) => (
+              <Reveal as="li" key={post.slug} delay={Math.min(i, 4) * 90} variant="up" className="border-t border-ink/10 pt-6">
                 <Link href={`/blog/${post.slug}`} className="group">
                   <p className="text-sm text-ink/50">
                     {new Date(post.date).toLocaleDateString("en-KE", {
@@ -37,13 +40,15 @@ export default function BlogIndex() {
                   </h2>
                   <p className="mt-2 text-ink/70">{post.excerpt}</p>
                 </Link>
-              </li>
+              </Reveal>
             ))}
           </ul>
         ) : (
-          <div className="rounded-xl border border-dashed border-ink/20 p-8 text-center">
-            <p className="text-ink/70">No posts published yet — check back soon.</p>
-          </div>
+          <Reveal variant="fade">
+            <div className="rounded-xl border border-dashed border-ink/20 p-8 text-center">
+              <p className="text-ink/70">No posts published yet — check back soon.</p>
+            </div>
+          </Reveal>
         )}
       </section>
     </>

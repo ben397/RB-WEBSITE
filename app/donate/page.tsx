@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { siteInfo } from "@/content/site";
 import { DonateForm } from "@/components/DonateForm";
+import { Reveal } from "@/components/Reveal";
 
 export const metadata: Metadata = {
   title: "Donate",
@@ -14,22 +15,24 @@ export default function DonatePage() {
     <>
       <section className="border-b border-ink/10 bg-paper">
         <div className="mx-auto max-w-4xl px-6 py-16">
-          <h1 className="font-serif text-4xl font-semibold text-navy sm:text-5xl">
-            Support Our Work
-          </h1>
-          <p className="mt-4 max-w-2xl text-lg text-ink/80">
-            Your donation supports savings groups, psychosocial support, the Peace Cup,
-            and advocacy work — led by the community it serves.
-          </p>
+          <Reveal variant="up">
+            <h1 className="font-serif text-4xl font-semibold text-navy sm:text-5xl">
+              Support Our Work
+            </h1>
+            <p className="mt-4 max-w-2xl text-lg text-ink/80">
+              Your donation supports savings groups, psychosocial support, the Peace Cup,
+              and advocacy work — led by the community it serves.
+            </p>
+          </Reveal>
         </div>
       </section>
 
       <section className="mx-auto grid max-w-4xl gap-12 px-6 py-16 md:grid-cols-5">
-        <div className="md:col-span-3">
+        <Reveal className="md:col-span-3" variant="up" delay={100}>
           <DonateForm />
-        </div>
+        </Reveal>
 
-        <div className="md:col-span-2">
+        <Reveal className="md:col-span-2" variant="up" delay={180}>
           <h2 className="font-serif text-lg font-semibold text-navy">
             Prefer to pay directly?
           </h2>
@@ -63,7 +66,7 @@ export default function DonatePage() {
             </a>{" "}
             to arrange an international transfer.
           </p>
-        </div>
+        </Reveal>
       </section>
     </>
   );

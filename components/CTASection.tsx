@@ -1,9 +1,10 @@
 import Link from "next/link";
+import { Reveal } from "@/components/Reveal";
 
 export function CTASection() {
   return (
     <section className="bg-ochre">
-      <div className="mx-auto max-w-6xl px-6 py-16 text-center">
+      <Reveal variant="fade" className="mx-auto max-w-6xl px-6 py-16 text-center">
         <h2 className="font-serif text-3xl font-semibold text-paper">
           Help us keep this work going.
         </h2>
@@ -17,7 +18,7 @@ export function CTASection() {
         >
           Donate now
         </Link>
-      </div>
+      </Reveal>
     </section>
   );
 }

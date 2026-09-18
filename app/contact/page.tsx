@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { siteInfo } from "@/content/site";
 import { ContactForm } from "@/components/ContactForm";
+import { Reveal } from "@/components/Reveal";
 
 export const metadata: Metadata = {
   title: "Contact",
@@ -21,22 +22,24 @@ export default function ContactPage() {
     <>
       <section className="border-b border-ink/10 bg-paper">
         <div className="mx-auto max-w-6xl px-6 py-16">
-          <h1 className="font-serif text-4xl font-semibold text-navy sm:text-5xl">
-            Get in Touch
-          </h1>
-          <p className="mt-4 max-w-2xl text-lg text-ink/80">
-            Questions about our programmes, partnership enquiries, or ways to get
-            involved — we&apos;d like to hear from you.
-          </p>
+          <Reveal variant="up">
+            <h1 className="font-serif text-4xl font-semibold text-navy sm:text-5xl">
+              Get in Touch
+            </h1>
+            <p className="mt-4 max-w-2xl text-lg text-ink/80">
+              Questions about our programmes, partnership enquiries, or ways to get
+              involved — we&apos;d like to hear from you.
+            </p>
+          </Reveal>
         </div>
       </section>
 
       <section className="mx-auto grid max-w-6xl gap-12 px-6 py-16 md:grid-cols-5">
-        <div className="md:col-span-3">
+        <Reveal className="md:col-span-3" variant="up" delay={100}>
           <ContactForm />
-        </div>
+        </Reveal>
 
-        <div className="md:col-span-2">
+        <Reveal className="md:col-span-2" variant="up" delay={180}>
           <h2 className="font-serif text-xl font-semibold text-navy">Reach us directly</h2>
           <dl className="mt-6 space-y-5 text-sm">
             <div>
@@ -78,7 +81,7 @@ export default function ContactPage() {
               </dd>
             </div>
           </dl>
-        </div>
+        </Reveal>
       </section>
     </>
   );
