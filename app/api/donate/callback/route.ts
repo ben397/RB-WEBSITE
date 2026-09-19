@@ -3,14 +3,32 @@ import { siteInfo } from "@/content/site";
 import { donationStatus } from "@/lib/donationStatus";
 import { upstash } from "@/lib/upstash";
 
-// The callback payload shape isn't documented anywhere seen so far. What's known: (a)
-// PayHero's own initiation response uses success/status/reference/CheckoutRequestID
-// (see ../route.ts), so the callback plausibly mirrors that; (b) PayHero sits on top of
-// Safaricom's Daraja STK callback, which nests everything under
-// Body.stkCallback.{ResultCode,ResultDesc,CheckoutRequestID,CallbackMetadata.Item[]} —
-// some aggregators pass that through directly or flatten it into a "response" object.
-// Rather than commit to one shape, check the plausible spots for each field. Verify
-// against a real test donation's logged payload and adjust if this misses anything.
+// Confirmed real PayHero callback shape (from an actual test donation):
+//
+//   {
+//     "forward_url": "",
+//     "response": {
+//       "Amount": 10,
+//       "CheckoutRequestID": "ws_CO_...",
+//       "ExternalReference": "INV-009",
+//       "MerchantRequestID": "...",
+//       "MpesaReceiptNumber": "SAE3YULR0Y",
+//       "Phone": "+254...",
+//       "ResultCode": 0,
+//       "ResultDesc": "The service request is processed successfully.",
+//       "Status": "Success"
+//     },
+//     "status": true
+//   }
+//
+// The top-level `status` is a BOOLEAN pass/fail flag; the nested `response.Status` is a
+// separate STRING ("Success"/presumably "Failed"). Must not be treated as the same field
+// under two spellings — an earlier version of this code did exactly that (picked
+// `status`/`Status` together, so the boolean `true` shadowed the string every time) and
+// only produced the right answer by accident, because ResultCode also independently
+// confirmed success. Kept a fallback for raw Safaricom Daraja nesting
+// (Body.stkCallback.{ResultCode,CallbackMetadata.Item[]}) in case a different PayHero
+// account or event type ever sends that shape instead — untested, but harmless if unused.
 interface ParsedCallback {
   externalReference?: string;
   checkoutRequestId?: string;
@@ -34,9 +52,20 @@ function parseCallback(raw: unknown): ParsedCallback {
     }
     return undefined;
   };
+  const pickTyped = <T,>(guard: (v: unknown) => v is T, ...keys: string[]): T | undefined => {
+    for (const source of [obj, nested, stk]) {
+      for (const key of keys) {
+        const value = (source as Record<string, unknown>)?.[key];
+        if (guard(value)) return value;
+      }
+    }
+    return undefined;
+  };
+  const isBoolean = (v: unknown): v is boolean => typeof v === "boolean";
+  const isString = (v: unknown): v is string => typeof v === "string";
 
   // Daraja's CallbackMetadata.Item is an array of {Name, Value} pairs rather than a flat
-  // object — flatten it so the same `pick` helper can reach into it too.
+  // object — flatten it so `pick` can reach into it too.
   const metadataItems = (stk as { CallbackMetadata?: { Item?: { Name?: string; Value?: unknown }[] } })
     ?.CallbackMetadata?.Item;
   const metadata: Record<string, unknown> = {};
@@ -48,18 +77,20 @@ function parseCallback(raw: unknown): ParsedCallback {
   const pickWithMetadata = (...keys: string[]): unknown => pick(...keys) ?? keys.map((k) => metadata[k]).find((v) => v != null);
 
   const resultCode = pick("ResultCode", "result_code");
-  const status = String(pick("status", "Status") ?? "").toUpperCase();
-  const successFlag = pick("success");
+  // "status"/"success" only when they're actually booleans, "Status" only when a string —
+  // deliberately not merged into one lookup (see the shape note above for why).
+  const booleanFlag = pickTyped(isBoolean, "status", "success");
+  const statusString = (pickTyped(isString, "Status") ?? "").toUpperCase();
 
   const success =
-    successFlag === true ||
+    booleanFlag === true ||
     resultCode === 0 ||
     resultCode === "0" ||
-    ["SUCCESS", "COMPLETED", "PAID"].includes(status);
+    ["SUCCESS", "COMPLETED", "PAID"].includes(statusString);
   const explicitFailure =
-    successFlag === false ||
+    booleanFlag === false ||
     (typeof resultCode === "number" && resultCode !== 0) ||
-    ["FAILED", "CANCELLED", "CANCELED", "TIMEOUT", "ERROR"].includes(status);
+    ["FAILED", "CANCELLED", "CANCELED", "TIMEOUT", "ERROR"].includes(statusString);
 
   return {
     externalReference: pick("external_reference", "ExternalReference") as string | undefined,
