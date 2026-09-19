@@ -2,23 +2,31 @@
 // bridge the donate initiation request and PayHero's later async callback, which land
 // in separate serverless invocations that share no memory.
 //
-// Needs UPSTASH_REDIS_REST_URL + UPSTASH_REDIS_REST_TOKEN (Vercel: Storage tab → add
-// "Upstash for Redis" from the marketplace, or create a free database directly at
-// upstash.com — either way it gives you these two values).
+// Vercel's "Upstash for Redis" marketplace integration (Storage tab → Create Database)
+// auto-injects the connection as KV_REST_API_URL / KV_REST_API_TOKEN — the legacy
+// "Vercel KV" naming, not Upstash's own UPSTASH_REDIS_REST_URL / UPSTASH_REDIS_REST_TOKEN
+// convention (confirmed against a real deployment: the marketplace flow only sets the KV_
+// names). Support both, preferring the Upstash-native names if both happen to be set.
+
+function credentials(): { url: string; token: string } | null {
+  const url = process.env.UPSTASH_REDIS_REST_URL || process.env.KV_REST_API_URL;
+  const token = process.env.UPSTASH_REDIS_REST_TOKEN || process.env.KV_REST_API_TOKEN;
+  if (!url || !token) return null;
+  return { url, token };
+}
 
 function isConfigured(): boolean {
-  return Boolean(process.env.UPSTASH_REDIS_REST_URL && process.env.UPSTASH_REDIS_REST_TOKEN);
+  return credentials() !== null;
 }
 
 async function command<T = unknown>(args: (string | number)[]): Promise<T | null> {
-  const url = process.env.UPSTASH_REDIS_REST_URL;
-  const token = process.env.UPSTASH_REDIS_REST_TOKEN;
-  if (!url || !token) return null;
+  const creds = credentials();
+  if (!creds) return null;
 
-  const res = await fetch(url, {
+  const res = await fetch(creds.url, {
     method: "POST",
     headers: {
-      Authorization: `Bearer ${token}`,
+      Authorization: `Bearer ${creds.token}`,
       "Content-Type": "application/json",
     },
     body: JSON.stringify(args),
