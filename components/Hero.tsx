@@ -38,14 +38,14 @@ export function Hero() {
         <Reveal className="relative hidden aspect-[4/5] overflow-hidden rounded-3xl md:col-span-2 md:block" delay={150} variant="scale">
           <Image
             src="/images/hero-community.jpg"
-            alt="Smiling children in the community Refugee Brotherhood serves"
+            alt="Children at a community gathering, representative stock photography"
             fill
             className="hero-image-drift object-cover"
             sizes="(min-width: 768px) 40vw, 100vw"
             priority
           />
           <div className="absolute inset-x-8 bottom-8 rounded-2xl bg-paper/10 p-4 backdrop-blur-sm">
-            <p className="text-sm text-paper/90">Peace Cup · Kayole, Nairobi</p>
+            <p className="text-sm text-paper/90">Community, Nairobi</p>
           </div>
         </Reveal>
       </div>

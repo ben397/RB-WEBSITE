@@ -40,24 +40,28 @@ Everything in `/content` is the single source of truth — components read from 
 
 ### 2. Content still pending from RB / Luke
 
-Search `content/*.ts` for `verified: false` and `null` values — each has a comment explaining exactly what's ambiguous. Highlights:
+Search `content/*.ts` for `verified: false` and `null` values — each has a comment explaining exactly what's ambiguous.
+
+Closed since the last pass: full team roster (`content/team.ts` — Luke Karema, Linda Kaunda, Asnath Kabatesi, Christel Bakayomo) and full partner list (`content/partners.ts` — 11 named partners).
+
+Still open:
 
 - Real phone number (`+254 111449564` vs `+254 794 693898` were both live)
 - Real address (rendered duplicated/misspelled on the live site)
 - Facebook URL and Instagram handle (two versions of each were live)
 - Registration/certificate number (footer + `/governance`)
 - M-Pesa paybill/till number (`/donate`) — deliberately left blank rather than guessed, since a wrong number here is money misdirected
-- Full team roster, roles, and consented photos
-- Full partner list, logos, and what each partnership does
+- Consented team photos (avatars are still illustrated placeholders) and partner logos (marquee/`/partners` currently render text wordmarks)
 - Two more Livelihood sub-projects (only 3 of 5 were individually identifiable from the live copy)
 - Verified impact numbers (beneficiaries, partner count, USLA branch count)
 - Board of Directors and governance structure (`/governance`)
 - Formal sign-off on the draft safeguarding policy (`/safeguarding`)
 - Alumni stories and blog posts (both currently empty states, ready for real content)
+- Real testimonials — `content/testimonials.ts` currently holds four sample quotes (`placeholder: true`, attributed to role only, never a specific invented name) to demo the carousel. Replace before this is treated as a finished page.
 
 ### 3. Images
 
-Every photo on the site is currently a custom SVG illustration (`components/illustrations/Illustration.tsx`), not a real photo — this environment has no network access to stock photo sources. Swap in real, consented photography of RB's actual work when available.
+The hero and four programme sections now use real stock photography (`public/images/`) rather than the SVG illustrations, which are still used for team avatars. None of it is RB's own — captions/alt text are written generically (no specific place, event, or "our community" claims) specifically so a stock photo is never presented as documentation of a real RB event or the specific people RB serves. Swap in real, consented photography of RB's actual work when available, and keep that same rule: a photo's caption should never claim more than the photo can honestly back up.
 
 ## Design
 
@@ -73,4 +77,4 @@ Every photo on the site is currently a custom SVG illustration (`components/illu
 5. **Credibility pages** — governance, safeguarding, privacy policy, annual report placeholder ✅
 6. **Donate** — M-Pesa STK push (KES), paybill fallback, payment-callback notification ✅
 7. **Blog** — structure + empty state in place; MDX/CMS upgrade optional once there's real content to publish ✅
-8. **Polish** — SEO (metadata, robots.txt, sitemap.xml), full route sweep ✅ — accessibility/Lighthouse pass and a staging deploy still to do
+8. **Polish** — SEO (metadata, robots.txt, sitemap.xml), full route sweep, sticky header, scroll-reveal animations (`components/Reveal.tsx`, IntersectionObserver-based, reduced-motion safe), real stock photography, partners marquee, deployed to Vercel ✅ — accessibility/Lighthouse pass on the live deploy still to do
