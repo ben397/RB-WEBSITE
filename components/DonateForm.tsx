@@ -1,11 +1,21 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
+import { useEffect, useRef, useState, type FormEvent } from "react";
 import { programmes } from "@/content/programs";
 
-type Status = "idle" | "submitting" | "success" | "error";
+type Status =
+  | "idle"
+  | "submitting"
+  | "waiting" // STK sent, polling for PayHero's callback result
+  | "untracked" // STK sent, but no status store configured to poll against
+  | "success"
+  | "failed"
+  | "timeout"
+  | "error";
 
 const PRESET_AMOUNTS = [500, 1000, 2500, 5000];
+const POLL_INTERVAL_MS = 3000;
+const MAX_POLLS = 40; // ~2 minutes, generous for entering an M-Pesa PIN
 
 export function DonateForm() {
   const [amount, setAmount] = useState<number | "">(1000);
@@ -13,8 +23,46 @@ export function DonateForm() {
   const [status, setStatus] = useState<Status>("idle");
   const [error, setError] = useState<string | null>(null);
   const [reference, setReference] = useState<string | null>(null);
+  const [receipt, setReceipt] = useState<string | null>(null);
+  const [failureReason, setFailureReason] = useState<string | null>(null);
+  const pollCount = useRef(0);
 
   const effectiveAmount = customAmount ? Number(customAmount) : amount;
+
+  useEffect(() => {
+    if (status !== "waiting" || !reference) return;
+
+    const interval = setInterval(async () => {
+      pollCount.current += 1;
+      try {
+        const res = await fetch(`/api/donate/status?reference=${encodeURIComponent(reference)}`);
+        const result = await res.json();
+
+        if (!result.tracked) {
+          setStatus("untracked");
+          return;
+        }
+        if (result.state === "SUCCESS") {
+          setReceipt(result.mpesaReceiptNumber ?? null);
+          setStatus("success");
+          return;
+        }
+        if (result.state === "FAILED") {
+          setFailureReason(result.resultDescription ?? null);
+          setStatus("failed");
+          return;
+        }
+      } catch {
+        // A single missed poll isn't fatal — try again next tick.
+      }
+
+      if (pollCount.current >= MAX_POLLS) {
+        setStatus("timeout");
+      }
+    }, POLL_INTERVAL_MS);
+
+    return () => clearInterval(interval);
+  }, [status, reference]);
 
   async function onSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -45,14 +93,110 @@ export function DonateForm() {
       }
 
       setReference(result.reference ?? null);
-      setStatus("success");
+      pollCount.current = 0;
+      setStatus(result.tracked ? "waiting" : "untracked");
     } catch {
       setStatus("error");
       setError("Couldn't reach the server. Check your connection and try again.");
     }
   }
 
+  function startOver() {
+    setStatus("idle");
+    setError(null);
+    setReference(null);
+    setReceipt(null);
+    setFailureReason(null);
+    pollCount.current = 0;
+  }
+
   if (status === "success") {
+    return (
+      <div className="rounded-2xl border border-sage/40 bg-sage/10 p-8 text-center">
+        <p className="font-serif text-2xl font-semibold text-navy">Thank you.</p>
+        <p className="mt-2 text-ink/70">
+          Your donation of KES {effectiveAmount.toLocaleString()} is confirmed — it goes
+          straight to work RB is already doing.
+        </p>
+        <dl className="mt-6 space-y-1 text-sm text-ink/70">
+          {receipt && (
+            <p>
+              M-Pesa receipt: <span className="font-semibold text-navy">{receipt}</span>
+            </p>
+          )}
+          {reference && (
+            <p>
+              Reference: <span className="font-semibold text-navy">{reference}</span>
+            </p>
+          )}
+        </dl>
+      </div>
+    );
+  }
+
+  if (status === "failed") {
+    return (
+      <div className="rounded-2xl border border-ochre/40 bg-ochre/5 p-6">
+        <p className="font-semibold text-navy">Payment didn&apos;t go through.</p>
+        <p className="mt-1 text-sm text-ink/70">
+          {failureReason || "The M-Pesa payment wasn't completed."} Nothing was charged.
+        </p>
+        <button
+          type="button"
+          onClick={startOver}
+          className="mt-4 rounded-full border border-ink/20 px-5 py-2 text-sm font-semibold text-navy hover:border-ochre"
+        >
+          Try again
+        </button>
+      </div>
+    );
+  }
+
+  if (status === "waiting") {
+    return (
+      <div className="rounded-2xl border border-sage/40 bg-sage/10 p-6">
+        <p className="font-semibold text-navy">Check your phone.</p>
+        <p className="mt-1 text-sm text-ink/70">
+          We&apos;ve sent an M-Pesa prompt to complete your donation of KES{" "}
+          {effectiveAmount.toLocaleString()}. Enter your M-Pesa PIN to confirm — this page
+          will update automatically.
+        </p>
+        {reference && (
+          <p className="mt-3 text-xs text-ink/70">
+            Reference: <span className="font-semibold text-navy">{reference}</span>
+          </p>
+        )}
+      </div>
+    );
+  }
+
+  if (status === "timeout") {
+    return (
+      <div className="rounded-2xl border border-ink/20 bg-paper p-6">
+        <p className="font-semibold text-navy">Still waiting to hear back.</p>
+        <p className="mt-1 text-sm text-ink/70">
+          If you completed the M-Pesa prompt, you should get an SMS confirmation from
+          Safaricom shortly — that&apos;s proof of payment either way. If you didn&apos;t
+          complete it, no donation was made.
+        </p>
+        {reference && (
+          <p className="mt-3 text-xs text-ink/70">
+            Reference: <span className="font-semibold text-navy">{reference}</span> — quote
+            this if you follow up with us.
+          </p>
+        )}
+        <button
+          type="button"
+          onClick={startOver}
+          className="mt-4 rounded-full border border-ink/20 px-5 py-2 text-sm font-semibold text-navy hover:border-ochre"
+        >
+          Start over
+        </button>
+      </div>
+    );
+  }
+
+  if (status === "untracked") {
     return (
       <div className="rounded-2xl border border-sage/40 bg-sage/10 p-6">
         <p className="font-semibold text-navy">Check your phone.</p>

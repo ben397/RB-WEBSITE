@@ -1,4 +1,6 @@
 import { NextResponse } from "next/server";
+import { donationStatus } from "@/lib/donationStatus";
+import { upstash } from "@/lib/upstash";
 
 interface DonateBody {
   name?: string;
@@ -72,6 +74,7 @@ export async function POST(request: Request) {
   }
 
   const externalReference = `RB-${Date.now()}`;
+  const upstashConfigured = upstash.isConfigured();
   const paymentFailedResponse = NextResponse.json(
     { error: "Couldn't start the M-Pesa payment right now. Please try again shortly." },
     { status: 502 },
@@ -108,14 +111,25 @@ export async function POST(request: Request) {
 
   // A 201 with success:true and status "QUEUED" means the STK push was sent to the
   // phone — it does not mean the donor has paid yet. That confirmation arrives later at
-  // PAYHERO_CALLBACK_URL (app/api/donate/callback/route.ts).
+  // PAYHERO_CALLBACK_URL (app/api/donate/callback/route.ts), tracked below by
+  // externalReference so the client can poll for it.
   if (!result?.success) {
     return paymentFailedResponse;
   }
 
+  if (upstashConfigured) {
+    await donationStatus.createPending({
+      reference: externalReference,
+      checkoutRequestId: result.CheckoutRequestID,
+      payheroReference: result.reference,
+      amount: Math.round(amount),
+      phone,
+    });
+  }
+
   return NextResponse.json({
     ok: true,
-    reference: result.reference ?? externalReference,
-    checkoutRequestId: result.CheckoutRequestID,
+    reference: externalReference,
+    tracked: upstashConfigured,
   });
 }
