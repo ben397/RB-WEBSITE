@@ -12,6 +12,7 @@ export function DonateForm() {
   const [customAmount, setCustomAmount] = useState("");
   const [status, setStatus] = useState<Status>("idle");
   const [error, setError] = useState<string | null>(null);
+  const [reference, setReference] = useState<string | null>(null);
 
   const effectiveAmount = customAmount ? Number(customAmount) : amount;
 
@@ -43,6 +44,7 @@ export function DonateForm() {
         return;
       }
 
+      setReference(result.reference ?? null);
       setStatus("success");
     } catch {
       setStatus("error");
@@ -58,6 +60,12 @@ export function DonateForm() {
           We&apos;ve sent an M-Pesa prompt to complete your donation of KES{" "}
           {effectiveAmount.toLocaleString()}. Enter your M-Pesa PIN to confirm.
         </p>
+        {reference && (
+          <p className="mt-3 text-sm text-ink/70">
+            Reference: <span className="font-semibold text-navy">{reference}</span> — quote
+            this if you need to follow up on this donation.
+          </p>
+        )}
       </div>
     );
   }

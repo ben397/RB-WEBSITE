@@ -1,9 +1,10 @@
 import { NextResponse } from "next/server";
 import { siteInfo } from "@/content/site";
 
-// PayHero (or M-Pesa directly) POSTs the payment result here once the donor confirms on
-// their phone. Payload shape isn't verified against live docs from this environment —
-// read defensively and log the raw body either way so nothing silently disappears.
+// PayHero POSTs the payment result here (to PAYHERO_CALLBACK_URL) once the donor confirms
+// on their phone. The initiation request/response in ../route.ts are matched against
+// PayHero's docs, but the callback payload shape itself isn't documented there — read
+// defensively and log the raw body either way so nothing silently disappears.
 export async function POST(request: Request) {
   const raw = await request.json().catch(() => null);
 

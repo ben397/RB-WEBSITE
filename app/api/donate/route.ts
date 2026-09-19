@@ -8,12 +8,13 @@ interface DonateBody {
 }
 
 // Accepts 2547XXXXXXXX, 2541XXXXXXXX, 07XXXXXXXX, 01XXXXXXXX, or +254 variants and
-// normalises to the 2547XXXXXXXX / 2541XXXXXXXX format M-Pesa APIs expect.
+// normalises to the 07XXXXXXXX / 01XXXXXXXX format PayHero's docs show
+// (e.g. "0787677676") — not the 254-prefixed form.
 function normaliseKenyanPhone(raw: string): string | null {
   const digits = raw.replace(/[^\d]/g, "");
-  if (/^254(7|1)\d{8}$/.test(digits)) return digits;
-  if (/^0(7|1)\d{8}$/.test(digits)) return `254${digits.slice(1)}`;
-  if (/^(7|1)\d{8}$/.test(digits)) return `254${digits}`;
+  if (/^254(7|1)\d{8}$/.test(digits)) return `0${digits.slice(3)}`;
+  if (/^0(7|1)\d{8}$/.test(digits)) return digits;
+  if (/^(7|1)\d{8}$/.test(digits)) return `0${digits}`;
   return null;
 }
 
@@ -53,11 +54,9 @@ export async function POST(request: Request) {
     );
   }
 
-  const reference = `RB-${Date.now()}`;
+  const externalReference = `RB-${Date.now()}`;
 
-  // PayHero's STK push API — verify field names and auth scheme against
-  // docs.payhero.co.ke before relying on this in production; it hasn't been exercised
-  // against a live key here.
+  // PayHero's "Initiate MPESA STK Push" endpoint (backend.payhero.co.ke/api/v2/payments).
   const payheroRes = await fetch("https://backend.payhero.co.ke/api/v2/payments", {
     method: "POST",
     headers: {
@@ -69,18 +68,28 @@ export async function POST(request: Request) {
       phone_number: phone,
       channel_id: Number(channelId),
       provider: "m-pesa",
-      external_reference: reference,
+      external_reference: externalReference,
       customer_name: body.name || undefined,
       callback_url: process.env.PAYHERO_CALLBACK_URL,
+      credential_id: process.env.PAYHERO_CREDENTIAL_ID || undefined,
     }),
   });
 
-  if (!payheroRes.ok) {
+  const result = await payheroRes.json().catch(() => null);
+
+  // A 201 with success:true and status "QUEUED" means the STK push was sent to the
+  // phone — it does not mean the donor has paid yet. That confirmation arrives later at
+  // PAYHERO_CALLBACK_URL (app/api/donate/callback/route.ts).
+  if (!payheroRes.ok || !result?.success) {
     return NextResponse.json(
       { error: "Couldn't start the M-Pesa payment right now. Please try again shortly." },
       { status: 502 },
     );
   }
 
-  return NextResponse.json({ ok: true, reference });
+  return NextResponse.json({
+    ok: true,
+    reference: result.reference ?? externalReference,
+    checkoutRequestId: result.CheckoutRequestID,
+  });
 }

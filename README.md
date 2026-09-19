@@ -36,7 +36,7 @@ Everything in `/content` is the single source of truth — components read from 
 
 - `NEXT_PUBLIC_SITE_URL` — the real deployed domain. Without it, metadata/OG tags and `sitemap.xml` point at `localhost`.
 - `RESEND_API_KEY` (+ `CONTACT_TO_EMAIL`, `CONTACT_FROM_EMAIL`) — the contact form (`/contact`) fails gracefully with a clear message until this is set. Not tested against a live key in development — verify a real submission before relying on it.
-- `PAYHERO_API_KEY`, `PAYHERO_CHANNEL_ID` (+ `PAYHERO_CALLBACK_URL`) — the donate form (`/donate`) fails gracefully until these are set. Field names/auth scheme are implemented from general knowledge of PayHero's API, not verified against live docs from this environment — check `docs.payhero.co.ke` and test a real payment before launch.
+- `PAYHERO_API_KEY`, `PAYHERO_CHANNEL_ID` (+ `PAYHERO_CALLBACK_URL`, optional `PAYHERO_CREDENTIAL_ID`) — the donate form (`/donate`) fails gracefully until these are set. Request/response shape for the STK push itself (`app/api/donate/route.ts`) is matched against PayHero's own "Initiate MPESA STK Push" docs. Not yet tested against a live key/real payment — do that before launch. The callback payload shape (`app/api/donate/callback/route.ts`) isn't documented anywhere seen so far and is handled defensively.
 
 ### 2. Content still pending from RB / Luke
 
