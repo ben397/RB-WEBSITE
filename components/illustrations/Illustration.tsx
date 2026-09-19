@@ -6,8 +6,8 @@
 
 const PALETTE = {
   navy: "#12263A",
-  blue: "#3674B5",
-  ochre: "#B5652D",
+  blue: "#326BA7",
+  ochre: "#9A5626",
   paper: "#F6F2EA",
   ink: "#2B2620",
   sage: "#7C8B6F",

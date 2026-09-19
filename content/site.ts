@@ -86,8 +86,12 @@ export const siteInfo = {
 
   theme: {
     navy: "#12263A",
-    blue: "#3674B5", // RB's existing brand blue, carried over from the live site/logo
-    ochre: "#B5652D",
+    // Blue/ochre are darkened slightly from RB's original brand hex (#3674B5 / #B5652D)
+    // to clear WCAG AA text contrast (4.5:1) against the paper background — the
+    // originals sat at 4.35:1 and 3.87:1. See app/globals.css for the live tokens this
+    // object doesn't actually feed (kept here for reference only).
+    blue: "#326BA7",
+    ochre: "#9A5626",
     paper: "#F6F2EA",
     ink: "#2B2620",
     sage: "#7C8B6F",

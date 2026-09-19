@@ -14,7 +14,7 @@ export default function PrivacyPage() {
         <h1 className="font-serif text-4xl font-semibold text-navy sm:text-5xl">
           Privacy Policy
         </h1>
-        <p className="mt-4 text-ink/60">Last updated: {new Date().getFullYear()}</p>
+        <p className="mt-4 text-ink/70">Last updated: {new Date().getFullYear()}</p>
       </Reveal>
 
       <div className="mt-10 space-y-8 text-ink/80">
@@ -51,7 +51,7 @@ export default function PrivacyPage() {
             <p className="mt-2">
               Under Kenya&apos;s Data Protection Act, 2019, you can ask what data we hold
               about you and request its correction or deletion. Contact{" "}
-              <a href={`mailto:${siteInfo.email.value}`} className="text-blue hover:text-ochre">
+              <a href={`mailto:${siteInfo.email.value}`} className="text-blue underline hover:text-ochre">
                 {siteInfo.email.value}
               </a>{" "}
               for any of these requests.

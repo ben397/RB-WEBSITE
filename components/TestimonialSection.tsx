@@ -74,24 +74,29 @@ export function TestimonialSection() {
                 </blockquote>
                 <figcaption className="mt-6">
                   <p className="font-semibold text-navy">{t.name}</p>
-                  <p className="text-sm text-ink/60">{t.role}</p>
+                  <p className="text-sm text-ink/70">{t.role}</p>
                 </figcaption>
               </figure>
             ))}
           </div>
 
           {testimonials.length > 1 && (
-            <div className="mt-4 flex justify-center gap-2">
+            <div className="mt-4 flex justify-center">
               {testimonials.map((t, i) => (
                 <button
                   key={t.name + t.role}
                   type="button"
                   onClick={() => scrollToIndex(i)}
                   aria-label={`Go to testimonial ${i + 1}`}
-                  className={`h-2 rounded-full transition-all ${
-                    i === index ? "w-6 bg-ochre" : "w-2 bg-ink/20"
-                  }`}
-                />
+                  className="flex h-6 w-6 shrink-0 items-center justify-center"
+                >
+                  <span
+                    aria-hidden="true"
+                    className={`h-2 rounded-full transition-all ${
+                      i === index ? "w-6 bg-ochre" : "w-2 bg-ink/20"
+                    }`}
+                  />
+                </button>
               ))}
             </div>
           )}

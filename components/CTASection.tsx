@@ -8,7 +8,7 @@ export function CTASection() {
         <h2 className="font-serif text-3xl font-semibold text-paper">
           Help us keep this work going.
         </h2>
-        <p className="mx-auto mt-3 max-w-xl text-paper/90">
+        <p className="mx-auto mt-3 max-w-xl text-paper">
           Every contribution supports savings groups, peace-building events, and advocacy
           led by the community it serves.
         </p>

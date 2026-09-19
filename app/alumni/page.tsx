@@ -32,7 +32,7 @@ export default function AlumniPage() {
               <Reveal as="li" key={a.name} delay={(i % 2) * 90} variant="up" className="h-full">
                 <div className="h-full rounded-xl border border-ink/10 p-5">
                   <p className="font-semibold text-navy">{a.name}</p>
-                  <p className="text-sm text-ink/60">{a.programme}</p>
+                  <p className="text-sm text-ink/70">{a.programme}</p>
                   <p className="mt-2 text-sm text-ink/70">{a.story}</p>
                 </div>
               </Reveal>

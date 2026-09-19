@@ -2,8 +2,13 @@
 
 :root {
   --color-navy: #12263a;
-  --color-blue: #3674b5;
-  --color-ochre: #b5652d;
+  /* Darkened ~8% from RB's original brand blue (#3674b5) — the original failed WCAG AA
+     text contrast against the paper background (4.35:1, needs 4.5:1). This still reads
+     as the same blue. */
+  --color-blue: #326ba7;
+  /* Darkened ~15% from the original ochre (#b5652d) for the same reason: paper text on
+     ochre (and ochre text on paper) was 3.87:1, needs 4.5:1. */
+  --color-ochre: #9a5626;
   --color-paper: #f6f2ea;
   --color-ink: #2b2620;
   --color-sage: #7c8b6f;

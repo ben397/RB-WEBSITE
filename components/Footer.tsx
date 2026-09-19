@@ -63,7 +63,7 @@ export function Footer() {
         </div>
       </div>
 
-      <div className="border-t border-paper/10 px-6 py-4 text-xs text-paper/50">
+      <div className="border-t border-paper/10 px-6 py-4 text-xs text-paper/60">
         <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-x-6 gap-y-2">
           <p>
             © {new Date().getFullYear()} {siteInfo.name}

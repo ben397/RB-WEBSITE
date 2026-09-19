@@ -129,11 +129,14 @@ export default async function ProgrammeDetail({
           </Reveal>
           <dl className="mt-8 grid gap-4 sm:grid-cols-3">
             {programme.highlights.map((h, i) => (
-              <Reveal key={h.label} delay={(i % 3) * 90} variant="up">
-                <div className="h-full rounded-xl bg-navy/5 p-4">
-                  <dt className="font-semibold text-ochre">{h.label}</dt>
-                  <dd className="mt-1 text-sm text-ink/70">{h.detail}</dd>
-                </div>
+              <Reveal
+                key={h.label}
+                delay={(i % 3) * 90}
+                variant="up"
+                className="h-full rounded-xl bg-navy/5 p-4"
+              >
+                <dt className="font-semibold text-ochre">{h.label}</dt>
+                <dd className="mt-1 text-sm text-ink/70">{h.detail}</dd>
               </Reveal>
             ))}
           </dl>

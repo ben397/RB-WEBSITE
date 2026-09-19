@@ -43,7 +43,7 @@ export default function ContactPage() {
           <h2 className="font-serif text-xl font-semibold text-navy">Reach us directly</h2>
           <dl className="mt-6 space-y-5 text-sm">
             <div>
-              <dt className="font-semibold text-ink/60">Phone</dt>
+              <dt className="font-semibold text-ink/70">Phone</dt>
               <dd>
                 <a href={`tel:${phone.value.replace(/\s+/g, "")}`} className="text-blue hover:text-ochre">
                   {phone.value}
@@ -51,7 +51,7 @@ export default function ContactPage() {
               </dd>
             </div>
             <div>
-              <dt className="font-semibold text-ink/60">Email</dt>
+              <dt className="font-semibold text-ink/70">Email</dt>
               <dd>
                 <a href={`mailto:${email.value}`} className="text-blue hover:text-ochre">
                   {email.value}
@@ -59,15 +59,15 @@ export default function ContactPage() {
               </dd>
             </div>
             <div>
-              <dt className="font-semibold text-ink/60">Address</dt>
+              <dt className="font-semibold text-ink/70">Address</dt>
               <dd className="text-ink/80">{address.value}</dd>
             </div>
             <div>
-              <dt className="font-semibold text-ink/60">Hours</dt>
+              <dt className="font-semibold text-ink/70">Hours</dt>
               <dd className="text-ink/80">{hours.weekdays}</dd>
             </div>
             <div>
-              <dt className="font-semibold text-ink/60">Follow us</dt>
+              <dt className="font-semibold text-ink/70">Follow us</dt>
               <dd className="mt-1 flex flex-wrap gap-3">
                 {socialLinks.map((s) => (
                   <a

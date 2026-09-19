@@ -64,7 +64,7 @@ export default function SafeguardingPage() {
             <p className="mt-2">
               If you have a safeguarding concern involving {siteInfo.name} — including
               concerns about a staff member, volunteer, or partner — contact us directly at{" "}
-              <a href={`mailto:${siteInfo.email.value}`} className="text-blue hover:text-ochre">
+              <a href={`mailto:${siteInfo.email.value}`} className="text-blue underline hover:text-ochre">
                 {siteInfo.email.value}
               </a>
               . Concerns are treated confidentially and taken seriously regardless of who is

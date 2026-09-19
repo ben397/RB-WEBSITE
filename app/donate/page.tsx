@@ -40,13 +40,13 @@ export default function DonatePage() {
             <dl className="mt-4 space-y-3 text-sm">
               {paybill && (
                 <div>
-                  <dt className="font-semibold text-ink/60">M-Pesa Paybill</dt>
+                  <dt className="font-semibold text-ink/70">M-Pesa Paybill</dt>
                   <dd className="text-ink/80">{paybill}</dd>
                 </div>
               )}
               {tillNumber && (
                 <div>
-                  <dt className="font-semibold text-ink/60">Till Number</dt>
+                  <dt className="font-semibold text-ink/70">Till Number</dt>
                   <dd className="text-ink/80">{tillNumber}</dd>
                 </div>
               )}
@@ -61,7 +61,7 @@ export default function DonatePage() {
           <p className="mt-6 text-sm text-ink/70">
             All amounts are in Kenyan Shillings (KES). For donations from outside Kenya,
             email{" "}
-            <a href={`mailto:${siteInfo.email.value}`} className="text-blue hover:text-ochre">
+            <a href={`mailto:${siteInfo.email.value}`} className="text-blue underline hover:text-ochre">
               {siteInfo.email.value}
             </a>{" "}
             to arrange an international transfer.
