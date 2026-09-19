@@ -2,10 +2,11 @@
 
 :root {
   --color-navy: #12263a;
-  /* Darkened ~8% from RB's original brand blue (#3674b5) — the original failed WCAG AA
-     text contrast against the paper background (4.35:1, needs 4.5:1). This still reads
-     as the same blue. */
-  --color-blue: #326ba7;
+  /* Sampled directly from RB's real logo mark (brand asset kit) — supersedes the earlier
+     #326ba7, which was only a WCAG-darkened guess at RB's original #3674b5 with no real
+     logo to sample from. #003f6a passes AA against paper with more margin, so no further
+     adjustment was needed. */
+  --color-blue: #003f6a;
   /* Darkened ~15% from the original ochre (#b5652d) for the same reason: paper text on
      ochre (and ochre text on paper) was 3.87:1, needs 4.5:1. */
   --color-ochre: #9a5626;

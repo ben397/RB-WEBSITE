@@ -68,8 +68,9 @@ The hero and four programme sections now use real stock photography (`public/ima
 
 ## Design
 
-- Colour: `#12263A` navy · `#3674B5` brand blue (carried over from RB's existing logo) · `#B5652D` ochre · `#F6F2EA` paper · `#2B2620` ink · `#7C8B6F` sage
+- Colour: `#12263A` navy · `#003F6A` brand blue (sampled from RB's real logo mark — see `public/rb-icon.png`, supersedes the earlier `#326BA7` guess) · `#B5652D` ochre · `#F6F2EA` paper · `#2B2620` ink · `#7C8B6F` sage
 - Type: Fraunces (headlines) / Work Sans (body)
+- Logo/icon marks, favicons, the manifest, and the OG share image (`public/rb-*.png`, `public/favicon-*.png`, `public/og-image.png`, `public/apple-touch-icon.png`, `app/manifest.webmanifest`) are RB's real brand asset kit, not placeholders. `rb-logo.svg` from the kit is a broken wrapper (an `<image>` tag pointing at a relative PNG path, not real vector art) and was skipped — use the PNGs directly. Header uses `rb-icon.png` next to the text wordmark; footer (dark navy background) uses `rb-icon-white.png`.
 
 ## Phases
 

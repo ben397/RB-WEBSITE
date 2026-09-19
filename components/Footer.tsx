@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { navLinks, siteInfo } from "@/content/site";
 
@@ -15,7 +16,10 @@ export function Footer() {
     <footer className="border-t border-paper/10 bg-navy text-paper">
       <div className="mx-auto grid max-w-6xl gap-10 px-6 py-14 sm:grid-cols-3">
         <div>
-          <p className="font-serif text-lg font-semibold">{siteInfo.name}</p>
+          <div className="flex items-center gap-2">
+            <Image src="/rb-icon-white.png" alt="" width={32} height={32} className="h-8 w-8" />
+            <p className="font-serif text-lg font-semibold">{siteInfo.name}</p>
+          </div>
           <p className="mt-3 max-w-xs text-sm text-paper/70">{siteInfo.tagline}</p>
         </div>
 
